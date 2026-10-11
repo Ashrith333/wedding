@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#7A1426">
+<title>Ashrith &amp; Aishwarya · RSVP</title>
+<meta name="description" content="18 &amp; 19 November 2026 · Nature Knots Resort, Bengaluru. Tap to RSVP.">
+<meta property="og:title" content="Ashrith &amp; Aishwarya · Wedding RSVP 🪔">
+<meta property="og:description" content="18 &amp; 19 November 2026 · Nature Knots Resort, Bengaluru. Tap to RSVP.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Rozha+One&family=Tiro+Telugu&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="rsvp.css">
+<script src="config.js" defer></script>
+<script src="rsvp.js" defer></script>
+</head>
+<body>
+<div class="frame">
+  <div class="toran" aria-hidden="true"></div>
+
+  <header class="hero">
+    <p class="blessing" lang="te">॥ శుభ వివాహం ॥</p>
+    <h1 class="couple">
+      <span>Ashrith Reddy</span>
+      <span class="amp">&amp;</span>
+      <span>Aishwarya</span>
+    </h1>
+    <p class="invite">With the blessings of our families, we warmly invite you to celebrate with us</p>
+    <div class="divider" aria-hidden="true"><span>❁</span></div>
+    <p class="when">18 &amp; 19 November 2026</p>
+    <p class="where">
+      <a href="https://www.google.com/maps/search/?api=1&amp;query=Nature+Knots+Resort+Bengaluru" target="_blank" rel="noopener">📍 Nature Knots Resort, Bengaluru</a>
+    </p>
+    <p class="lede">It would mean the world to have you with us. Kindly share your plans below 🙏</p>
+  </header>
+
+  <main id="app">
+    <ol class="progress" id="progress" aria-label="Progress"></ol>
+
+    <form id="rsvp" novalidate>
+      <!-- Honeypot: real guests never see or fill this -->
+      <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+      <!-- STEP 1 — who -->
+      <section class="step is-active" data-label="You" aria-labelledby="h-you">
+        <h2 id="h-you" tabindex="-1">Namaste 🙏</h2>
+        <p class="sub">We're so glad you're here</p>
+        <p class="welcome" id="welcome" hidden></p>
+
+        <div class="q field" data-required data-error="Please tell us your name">
+          <label for="name">Your full name</label>
+          <input id="name" name="name" type="text" autocomplete="name" autocapitalize="words" maxlength="80" placeholder="e.g. Ramesh Kumar">
+        </div>
+
+        <div class="q field" data-required data-validate="phone" data-error="Please enter a valid 10-digit mobile number">
+          <label for="phone">Mobile number <small>(WhatsApp preferred)</small></label>
+          <div class="phone">
+            <span class="cc">+91</span>
+            <input id="phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="10-digit number">
+            <span class="tick" aria-hidden="true">✓</span>
+          </div>
+          <p class="hint">So we can stay in touch with you 😊</p>
+        </div>
+
+        <fieldset class="q" data-required data-error="Please choose an option 🙏">
+          <legend>Who will be joining us?</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="party" value="Just me"><span>🙋 Just me</span></label>
+            <label class="chip"><input type="radio" name="party" value="With spouse"><span>💑 With spouse</span></label>
+            <label class="chip"><input type="radio" name="party" value="With family"><span>👨‍👩‍👧 With family</span></label>
+          </div>
+          <div class="counters" data-show="family" hidden>
+            <div class="counter">
+              <span class="counter-label">Adults <small>(including you)</small></span>
+              <button type="button" class="ctr" data-for="adults" data-delta="-1" aria-label="Fewer adults">−</button>
+              <input type="number" id="adults" name="adults" value="2" min="1" max="20" readonly aria-label="Adults">
+              <button type="button" class="ctr" data-for="adults" data-delta="1" aria-label="More adults">+</button>
+            </div>
+            <div class="counter">
+              <span class="counter-label">Kids <small>(under 12)</small></span>
+              <button type="button" class="ctr" data-for="kids" data-delta="-1" aria-label="Fewer kids">−</button>
+              <input type="number" id="kids" name="kids" value="0" min="0" max="20" readonly aria-label="Kids">
+              <button type="button" class="ctr" data-for="kids" data-delta="1" aria-label="More kids">+</button>
+            </div>
+          </div>
+        </fieldset>
+      </section>
+
+      <!-- STEP 2 — sangeet: the 17th is only revealed to people who'll dance -->
+      <section class="step" data-label="Sangeet" aria-labelledby="h-sangeet">
+        <h2 id="h-sangeet" tabindex="-1">Sangeet Night 💃🕺</h2>
+        <p class="sub">An evening of music, dance and lots of joy</p>
+
+        <fieldset class="q" data-required data-error="Please choose an option 🙏">
+          <legend>Would you like to dance with us at the Sangeet?</legend>
+          <div class="chips tiles">
+            <label class="chip"><input type="radio" name="dance" value="Yes"><span><i class="emoji">💃</i>Yes, I'd love to!</span></label>
+            <label class="chip"><input type="radio" name="dance" value="No"><span><i class="emoji">👏</i>I'll cheer you on</span></label>
+          </div>
+        </fieldset>
+
+        <div class="reveal" data-show="dancing" hidden>
+          <article class="event event-sangeet">
+            <div class="date"><b>17</b><small>Nov · Tue</small></div>
+            <div>
+              <h3>Mehendi &amp; Sangeet</h3>
+              <p>Evening onwards · Nature Knots Resort</p>
+            </div>
+          </article>
+          <p class="note">Wonderful! 🎉 We can't wait to see you on stage. We'll be in touch soon with the details 💌</p>
+
+          <div class="q" data-show="groupDancing" hidden>
+            <div class="counter">
+              <span class="counter-label">How many of you would like to dance?</span>
+              <button type="button" class="ctr" data-for="dancers" data-delta="-1" aria-label="Fewer dancers">−</button>
+              <input type="number" id="dancers" name="dancers" value="1" min="1" max="20" readonly aria-label="Dancers">
+              <button type="button" class="ctr" data-for="dancers" data-delta="1" aria-label="More dancers">+</button>
+            </div>
+          </div>
+
+          <div class="q field">
+            <label for="song">A song you'd love to dance to <small>(optional)</small></label>
+            <input id="song" name="song" type="text" maxlength="120" placeholder="e.g. Butta Bomma">
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 3 — wedding days -->
+      <section class="step" data-label="Days" aria-labelledby="h-days">
+        <h2 id="h-days" tabindex="-1">The Wedding Days</h2>
+        <p class="sub">We'd love to have you for all of it ❤️</p>
+
+        <div class="events">
+          <article class="event">
+            <div class="date"><b>18</b><small>Nov · Wed</small></div>
+            <div><h3>Haldi</h3><p>9:00 AM onwards</p></div>
+          </article>
+          <article class="event">
+            <div class="date"><b>18</b><small>Nov · Wed</small></div>
+            <div><h3>Reception</h3><p>Evening</p></div>
+          </article>
+          <article class="event">
+            <div class="date"><b>19</b><small>Nov · Thu</small></div>
+            <div><h3>Wedding Ceremony</h3><p>6:30 AM onwards</p></div>
+          </article>
+        </div>
+
+        <fieldset class="q" data-required data-error="Please choose an option 🙏">
+          <legend>Will you be able to join us on both days?</legend>
+          <div class="chips stack">
+            <label class="chip"><input type="radio" name="days" value="Both days"><span>❤️ Yes, I'll be there both days!</span></label>
+            <label class="chip"><input type="radio" name="days" value="Some events"><span>🗓️ I can make it to some of the celebrations</span></label>
+            <label class="chip"><input type="radio" name="days" value="Not sure yet"><span>🤔 Still figuring out my schedule</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="q reveal" data-show="someEvents" data-required data-error="Please choose at least one celebration 🙏" hidden>
+          <legend>Which celebrations will you join us for?</legend>
+          <div class="chips stack">
+            <label class="chip"><input type="checkbox" name="events" value="Haldi"><span>Haldi · 18 Nov, 9 AM</span></label>
+            <label class="chip"><input type="checkbox" name="events" value="Reception"><span>Reception · 18 Nov, evening</span></label>
+            <label class="chip"><input type="checkbox" name="events" value="Wedding"><span>Wedding · 19 Nov, 6:30 AM</span></label>
+          </div>
+          <p class="hint">We understand the timings may be a little early or late with your busy schedule — we'll be happy to see you at whichever you can make 😊</p>
+        </fieldset>
+
+        <p class="note reveal" data-show="daysUnsure" hidden>No worries at all! You can come back anytime and update your response 😊</p>
+      </section>
+
+      <!-- STEP 4 — stay: only asked when they're coming for both days -->
+      <section class="step" data-label="Stay" data-when="twoDays" aria-labelledby="h-stay">
+        <h2 id="h-stay" tabindex="-1">Your Stay</h2>
+        <p class="sub">We'd love for you to be comfortable 🥰</p>
+
+        <fieldset class="q" data-required data-error="Please choose an option 🙏">
+          <legend>Would you like us to arrange a stay for you at the resort?</legend>
+          <div class="chips stack">
+            <label class="chip"><input type="radio" name="stay" value="Yes"><span>🏨 Yes, please</span></label>
+            <label class="chip"><input type="radio" name="stay" value="No"><span>🏠 No, thank you — I'm all set</span></label>
+            <label class="chip"><input type="radio" name="stay" value="Not sure yet"><span>🤔 I'm not sure yet</span></label>
+          </div>
+        </fieldset>
+
+        <div class="reveal" data-show="needStay" hidden>
+          <div class="q field">
+            <label for="city">Where will you be travelling from? <small>(city)</small></label>
+            <input id="city" name="city" type="text" autocomplete="address-level2" maxlength="60" placeholder="e.g. Hyderabad">
+          </div>
+
+          <fieldset class="q" data-required data-error="Please let us know when you'll arrive 🙏">
+            <legend>When will you arrive?</legend>
+            <div class="chips">
+              <label class="chip" data-show="dancing" hidden><input type="radio" name="arrival" value="17 Nov"><span>17 Nov, for Sangeet</span></label>
+              <label class="chip"><input type="radio" name="arrival" value="18 Nov morning"><span>18 Nov, morning</span></label>
+              <label class="chip"><input type="radio" name="arrival" value="18 Nov evening"><span>18 Nov, evening</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="q" data-required data-error="Please choose an option 🙏">
+            <legend>When will you head back?</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="departure" value="19 Nov"><span>19 Nov, after the wedding</span></label>
+              <label class="chip"><input type="radio" name="departure" value="20 Nov"><span>20 Nov</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="q">
+            <legend>Would you like a pickup in Bengaluru? <small>(optional)</small></legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="pickup" value="No"><span>No, thank you</span></label>
+              <label class="chip"><input type="radio" name="pickup" value="Airport"><span>✈️ Airport</span></label>
+              <label class="chip"><input type="radio" name="pickup" value="Railway station"><span>🚆 Railway</span></label>
+              <label class="chip"><input type="radio" name="pickup" value="Bus stand"><span>🚌 Bus</span></label>
+            </div>
+          </fieldset>
+        </div>
+
+        <p class="note reveal" data-show="stayUnsure" hidden>No problem at all — you can update this anytime 😊</p>
+      </section>
+
+      <!-- STEP 5 — note + review -->
+      <section class="step" data-label="Done" aria-labelledby="h-done">
+        <h2 id="h-done" tabindex="-1">Almost there!</h2>
+        <p class="sub">Have a quick look and send it our way 💌</p>
+
+        <div class="q field">
+          <label for="note">Anything you'd like us to know? <small>(optional)</small></label>
+          <textarea id="note" name="note" rows="3" maxlength="500" placeholder="Any special needs (like assistance for elders), or a few kind words for us 💌"></textarea>
+        </div>
+
+        <div class="review">
+          <h3>Your RSVP</h3>
+          <dl id="summary"></dl>
+        </div>
+      </section>
+
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+
+      <nav class="nav">
+        <button type="button" class="btn ghost" id="back">← Back</button>
+        <button type="submit" class="btn primary" id="next">Continue →</button>
+      </nav>
+    </form>
+
+    <section class="thanks" id="thanks" hidden aria-labelledby="thanks-title">
+      <p class="blessing big" lang="te">ధన్యవాదాలు</p>
+      <h2 id="thanks-title" tabindex="-1">Thank you!</h2>
+      <p id="thanks-msg"></p>
+      <div class="review"><dl id="thanks-summary"></dl></div>
+      <button type="button" class="btn ghost" id="edit">✏️ Edit my response</button>
+    </section>
+  </main>
+</div>
+
+<footer class="foot">With love, from both our families 🪔</footer>
+</body>
+</html>

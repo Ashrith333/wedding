@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-100 -100 200 200">
+  <defs>
+    <path id="p" d="M0-94C12-80 12-62 0-50C-12-62-12-80 0-94Z"/>
+    <path id="q" d="M0-56C8-47 8-36 0-28C-8-36-8-47 0-56Z"/>
+  </defs>
+  <g fill="none" stroke="#B5832A" stroke-width="1.6">
+    <circle r="97"/>
+    <circle r="66" stroke-width="3.2" stroke-linecap="round" stroke-dasharray=".1 7"/>
+    <circle r="46"/>
+    <circle r="24" stroke-dasharray="2 3"/>
+    <use href="#p" xlink:href="#p" transform="rotate(0)"/>
+    <use href="#p" xlink:href="#p" transform="rotate(30)"/>
+    <use href="#p" xlink:href="#p" transform="rotate(60)"/>
+    <use href="#p" xlink:href="#p" transform="rotate(90)"/>
+    <use href="#p" xlink:href="#p" transform="rotate(120)"/>
+    <use href="#p" xlink:href="#p" transform="rotate(150)"/>
+    <use href="#p" xlink:href="#p" transform="rotate(180)"/>
+    <use href="#p" xlink:href="#p" transform="rotate(210)"/>
+    <use href="#p" xlink:href="#p" transform="rotate(240)"/>
+    <use href="#p" xlink:href="#p" transform="rotate(270)"/>
+    <use href="#p" xlink:href="#p" transform="rotate(300)"/>
+    <use href="#p" xlink:href="#p" transform="rotate(330)"/>
+    <use href="#q" xlink:href="#q" transform="rotate(15)"/>
+    <use href="#q" xlink:href="#q" transform="rotate(45)"/>
+    <use href="#q" xlink:href="#q" transform="rotate(75)"/>
+    <use href="#q" xlink:href="#q" transform="rotate(105)"/>
+    <use href="#q" xlink:href="#q" transform="rotate(135)"/>
+    <use href="#q" xlink:href="#q" transform="rotate(165)"/>
+    <use href="#q" xlink:href="#q" transform="rotate(195)"/>
+    <use href="#q" xlink:href="#q" transform="rotate(225)"/>
+    <use href="#q" xlink:href="#q" transform="rotate(255)"/>
+    <use href="#q" xlink:href="#q" transform="rotate(285)"/>
+    <use href="#q" xlink:href="#q" transform="rotate(315)"/>
+    <use href="#q" xlink:href="#q" transform="rotate(345)"/>
+  </g>
+  <circle r="10" fill="#B5832A"/>
+</svg>
