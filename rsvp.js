@@ -92,22 +92,28 @@
     const s = read();
     const family = s.party === 'With family';
     const yesNo = ev => (s.days === 'Not sure yet' ? 'Maybe' : s.days ? (attending(s, ev) ? 'Yes' : 'No') : '');
+    const answers = {
+      'Name': s.name || '',
+      'Coming': s.party || '',
+      'Adults': family ? int(s.adults, 1, 20) : partySize(s),
+      'Kids': family ? int(s.kids, 0, 20) : 0,
+      'Dancing at Sangeet': s.dance === 'Yes' ? 'Yes' : 'No',
+      'Days': s.days || '',
+      'Haldi 18th AM': yesNo('Haldi'),
+      'Reception 18th PM': yesNo('Reception'),
+      'Wedding 19th AM': yesNo('Wedding'),
+      'Accommodation': RULES.stayAsked(s) ? s.stay || '' : '',
+      'Note': s.note || '',
+    };
     return {
       phone: normalisePhone(s.phone),
       website: s.website || '',
-      answers: {
-        'Name': s.name || '',
-        'Coming': s.party || '',
-        'Adults': family ? int(s.adults, 1, 20) : partySize(s),
-        'Kids': family ? int(s.kids, 0, 20) : 0,
-        'Dancing at Sangeet': s.dance === 'Yes' ? 'Yes' : 'No',
-        'Days': s.days || '',
-        'Haldi 18th AM': yesNo('Haldi'),
-        'Reception 18th PM': yesNo('Reception'),
-        'Wedding 19th AM': yesNo('Wedding'),
-        'Accommodation': RULES.stayAsked(s) ? s.stay || '' : '',
-        'Note': s.note || '',
-      },
+      answers,
+      // Flat copies for the first version of the Sheet script; harmless once it's updated.
+      name: answers['Name'], party: answers['Coming'], adults: answers['Adults'], kids: answers['Kids'],
+      dance: answers['Dancing at Sangeet'], days: answers['Days'], haldi: answers['Haldi 18th AM'],
+      reception: answers['Reception 18th PM'], wedding: answers['Wedding 19th AM'],
+      stay: answers['Accommodation'], note: answers['Note'],
     };
   }
 
