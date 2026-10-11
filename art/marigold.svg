@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="60" viewBox="0 0 22 60">
+  <defs>
+    <g id="m">
+      <circle r="7.5" fill="#E8730C"/>
+      <circle r="7.5" fill="none" stroke="#FBB13C" stroke-width="3" stroke-dasharray="2.4 1.6"/>
+      <circle r="4.6" fill="#F59A1B"/>
+      <circle r="4.6" fill="none" stroke="#D2600A" stroke-width="2" stroke-dasharray="1.6 1.3"/>
+      <circle r="1.8" fill="#9C3A06"/>
+    </g>
+  </defs>
+  <path d="M11 0V54" stroke="#7A4A12" stroke-width="1"/>
+  <use href="#m" xlink:href="#m" transform="translate(11 9)"/>
+  <use href="#m" xlink:href="#m" transform="translate(11 24) scale(.9)"/>
+  <use href="#m" xlink:href="#m" transform="translate(11 38) scale(.8)"/>
+  <circle cx="11" cy="49" r="3" fill="#FFFDF5" stroke="#E9D9B5" stroke-width=".8"/>
+  <circle cx="11" cy="56" r="2.4" fill="#C79A3B"/>
+</svg>

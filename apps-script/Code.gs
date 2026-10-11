@@ -1,49 +1,54 @@
 /**
- * Wedding RSVP backend — paste into your Google Sheet → Extensions → Apps Script.
+ * Wedding RSVP backend. Paste into your Google Sheet: Extensions > Apps Script.
  * Setup steps: apps-script/SETUP.md
  *
  *  RSVPs    one row per phone number, always the guest's latest (final) answers
  *  History  every submission ever sent, append-only, so nothing is ever lost
  *  Summary  live headcounts
  *
+ * Columns are matched by their header name, so the page can add or drop a question without
+ * changing this script, and you can reorder or delete columns in the sheet safely.
  * The sheet stays private to you: guests can only send answers, never read them.
  */
 
 const RSVPS = 'RSVPs';
 const HISTORY = 'History';
 const SUMMARY = 'Summary';
+const SUMMARY_TITLE = 'Wedding RSVPs (live)';
 
-// [key sent by the page, column header]
-const FIELDS = [
-  ['phone', 'Phone'],
-  ['name', 'Name'],
-  ['party', 'Coming'],
-  ['adults', 'Adults'],
-  ['kids', 'Kids'],
-  ['dance', 'Dancing at Sangeet'],
-  ['dancers', 'How many dancing'],
-  ['song', 'Song idea'],
-  ['days', 'Both days?'],
-  ['haldi', 'Haldi 18th AM'],
-  ['reception', 'Reception 18th PM'],
-  ['wedding', 'Wedding 19th AM'],
-  ['stay', 'Needs stay'],
-  ['city', 'Travelling from'],
-  ['arrival', 'Arriving'],
-  ['departure', 'Leaving'],
-  ['pickup', 'Pickup'],
-  ['note', 'Note'],
-];
-const NUMBERS = ['adults', 'kids', 'dancers'];
+// Starting layout for a fresh sheet; the page decides the real columns when it sends answers.
+const QUESTIONS = ['Name', 'Coming', 'Adults', 'Kids', 'Dancing at Sangeet', 'Days',
+  'Haldi 18th AM', 'Reception 18th PM', 'Wedding 19th AM', 'Accommodation', 'Note'];
 const META = ['First sent', 'Last updated', 'Times sent'];
-const RSVP_HEADERS = FIELDS.map(f => f[1]).concat(META);
-const HISTORY_HEADERS = ['Sent at'].concat(FIELDS.map(f => f[1]), ['Action']);
 
-/** Run once from the editor (▶ Run) to create the tabs and grant permissions. */
+// {Header} is replaced with that column of the RSVPs tab.
+const SUMMARY_ROWS = [
+  ['Responses', '=COUNTA(RSVPs!A2:A)'],
+  ['Total guests (adults + kids)', '=SUM({Adults})+SUM({Kids})'],
+  ['Kids', '=SUM({Kids})'],
+  ['', ''],
+  ['Dancing at the Sangeet (responses)', '=COUNTIF({Dancing at Sangeet},"Yes")'],
+  ['', ''],
+  ['Coming both days (responses)', '=COUNTIF({Days},"Both days")'],
+  ['Only some events (responses)', '=COUNTIF({Days},"Some events")'],
+  ['Not sure yet (responses)', '=COUNTIF({Days},"Not sure yet")'],
+  ['Haldi: confirmed guests', '=SUMPRODUCT(({Haldi 18th AM}="Yes")*({Adults}+{Kids}))'],
+  ['Reception: confirmed guests', '=SUMPRODUCT(({Reception 18th PM}="Yes")*({Adults}+{Kids}))'],
+  ['Wedding: confirmed guests', '=SUMPRODUCT(({Wedding 19th AM}="Yes")*({Adults}+{Kids}))'],
+  ['', ''],
+  ['Need a stay for 1 night (responses)', '=COUNTIF({Accommodation},"1 night")'],
+  ['Need a stay for 2 nights (responses)', '=COUNTIF({Accommodation},"2 nights")'],
+  ['Guests needing a stay', '=SUMPRODUCT((({Accommodation}="1 night")+({Accommodation}="2 nights"))*({Adults}+{Kids}))'],
+  ['Guest-nights to book', '=SUMPRODUCT((({Accommodation}="1 night")+2*({Accommodation}="2 nights"))*({Adults}+{Kids}))'],
+];
+
+/**
+ * Run once from the editor (▶ Run) to create the tabs and grant permissions.
+ * Safe to run again: empty tabs are rebuilt with the current columns, tabs with answers are kept.
+ */
 function setup() {
   const ss = SpreadsheetApp.getActive();
-  sheet_(ss, RSVPS, RSVP_HEADERS);
-  sheet_(ss, HISTORY, HISTORY_HEADERS);
+  tabs_(ss, QUESTIONS);
   summary_(ss);
 }
 
@@ -58,7 +63,11 @@ function doPost(e) {
     lock.waitLock(20000);
     const data = JSON.parse(e.postData.contents);
     if (data.website) return reply_({ ok: true, status: 'created' }); // honeypot: quietly drop bots
-    return reply_({ ok: true, status: upsert_(clean_(data)) });
+    const phone = String(data.phone || '');
+    if (!/^[6-9]\d{9}$/.test(phone)) throw new Error('Invalid phone number');
+    const answers = clean_(data.answers);
+    if (String(answers['Name'] || '').length < 2) throw new Error('Name missing');
+    return reply_({ ok: true, status: save_(phone, answers) });
   } catch (err) {
     return reply_({ ok: false, error: String((err && err.message) || err) });
   } finally {
@@ -66,106 +75,109 @@ function doPost(e) {
   }
 }
 
-function upsert_(r) {
+function save_(phone, answers) {
   const ss = SpreadsheetApp.getActive();
-  const sheet = sheet_(ss, RSVPS, RSVP_HEADERS);
-  const history = sheet_(ss, HISTORY, HISTORY_HEADERS);
-  summary_(ss);
-
-  const values = FIELDS.map(f => r[f[0]]);
+  const keys = Object.keys(answers);
   const now = new Date();
-  const last = sheet.getLastRow();
-  const phones = last > 1 ? sheet.getRange(2, 1, last - 1, 1).getDisplayValues().map(row => row[0]) : [];
-  const at = phones.indexOf(r.phone);
-  let status;
+  const { rsvps, history } = tabs_(ss, keys);
 
-  if (at === -1) {
-    sheet.getRange(last + 1, 1, 1, RSVP_HEADERS.length).setValues([values.concat([now, now, 1])]);
-    status = 'created';
-  } else {
-    const row = at + 2;
-    const meta = sheet.getRange(row, FIELDS.length + 1, 1, META.length).getValues()[0];
-    sheet.getRange(row, 1, 1, RSVP_HEADERS.length)
-      .setValues([values.concat([meta[0] || now, now, (Number(meta[2]) || 1) + 1])]);
-    status = 'updated';
-  }
+  const cols = headers_(rsvps, ['Phone'].concat(keys, META));
+  const phoneCol = cols.indexOf('Phone') + 1;
+  const last = rsvps.getLastRow();
+  const phones = last > 1 ? rsvps.getRange(2, phoneCol, last - 1, 1).getDisplayValues().map(r => r[0]) : [];
+  const at = phones.indexOf(phone);
+  const row = at === -1 ? last + 1 : at + 2;
+  const old = at === -1 ? [] : rsvps.getRange(row, 1, 1, cols.length).getValues()[0];
+  const was = h => old[cols.indexOf(h)];
+  const record = Object.assign({}, answers, {
+    'Phone': phone,
+    'First sent': (at !== -1 && was('First sent')) || now,
+    'Last updated': now,
+    'Times sent': at === -1 ? 1 : (Number(was('Times sent')) || 1) + 1,
+  });
+  rsvps.getRange(row, 1, 1, cols.length)
+    .setValues([cols.map((h, i) => (h in record ? record[h] : old[i] !== undefined ? old[i] : ''))]);
 
-  history.appendRow([now].concat(values, [status]));
+  const status = at === -1 ? 'created' : 'updated';
+  const hcols = headers_(history, ['Sent at', 'Phone'].concat(keys, ['Action']));
+  const entry = Object.assign({}, answers, { 'Sent at': now, 'Phone': phone, 'Action': status });
+  history.appendRow(hcols.map(h => (h in entry ? entry[h] : '')));
   return status;
 }
 
-function clean_(d) {
-  const r = {};
-  FIELDS.forEach(([key]) => {
-    r[key] = NUMBERS.indexOf(key) >= 0
-      ? Math.max(0, Math.min(20, parseInt(d[key], 10) || 0))
-      : text_(d[key]);
+// Only short header names and plain values get through.
+function clean_(raw) {
+  const out = {};
+  Object.keys(raw || {}).slice(0, 40).forEach(k => {
+    const key = String(k).trim().slice(0, 40);
+    if (!key || /^[=+\-@]/.test(key)) return;
+    const v = raw[k];
+    out[key] = typeof v === 'number' && isFinite(v) ? Math.max(0, Math.min(50, Math.round(v))) : text_(v);
   });
-  if (!/^[6-9]\d{9}$/.test(r.phone)) throw new Error('Invalid phone number');
-  if (r.name.length < 2) throw new Error('Name missing');
-  return r;
+  return out;
 }
 
-// Plain text only: trims, caps length, and stops "=…" being run as a sheet formula.
+// Plain text only: trims, caps length, and stops "=..." being run as a sheet formula.
 function text_(v) {
   const s = String(v == null ? '' : v).trim().slice(0, 500);
   return /^[=+\-@]/.test(s) ? "'" + s : s;
 }
 
+// Makes sure the RSVPs, History and Summary tabs exist and fit the questions being sent.
+function tabs_(ss, keys) {
+  const r = sheet_(ss, RSVPS, ['Phone'].concat(keys, META));
+  const h = sheet_(ss, HISTORY, ['Sent at', 'Phone'].concat(keys, ['Action']));
+  const sum = ss.getSheetByName(SUMMARY);
+  if (r.fresh || h.fresh || !sum || sum.getRange('A1').getDisplayValue() !== SUMMARY_TITLE) summary_(ss);
+  return { rsvps: r.sh, history: h.sh };
+}
+
 function sheet_(ss, name, headers) {
   let sh = ss.getSheetByName(name);
-  if (sh) return sh;
+  if (sh) {
+    const current = sh.getRange(1, 1, 1, Math.max(sh.getLastColumn(), 1)).getDisplayValues()[0];
+    if (current.join('|') === headers.join('|') || sh.getLastRow() > 1 || ss.getSheets().length < 2) {
+      return { sh, fresh: false };
+    }
+    ss.deleteSheet(sh); // no answers in it yet, so start it again with the current columns
+  }
   sh = ss.insertSheet(name);
-  sh.getRange(1, 1, 1, headers.length).setValues([headers])
-    .setFontWeight('bold').setBackground('#7A1426').setFontColor('#FFE7A8');
+  styleHeader_(sh.getRange(1, 1, 1, headers.length).setValues([headers]));
   sh.setFrozenRows(1);
   // Keep phone numbers as text so they match exactly
   sh.getRange(1, headers.indexOf('Phone') + 1, sh.getMaxRows(), 1).setNumberFormat('@');
-  return sh;
+  return { sh, fresh: true };
 }
 
+// Returns the sheet's header names, adding any that are missing at the end.
+function headers_(sh, wanted) {
+  const have = sh.getRange(1, 1, 1, Math.max(sh.getLastColumn(), 1)).getDisplayValues()[0];
+  while (have.length && !have[have.length - 1]) have.pop();
+  const missing = wanted.filter(h => have.indexOf(h) === -1);
+  if (missing.length) {
+    const extra = have.length + missing.length - sh.getMaxColumns();
+    if (extra > 0) sh.insertColumnsAfter(sh.getMaxColumns(), extra);
+    styleHeader_(sh.getRange(1, have.length + 1, 1, missing.length).setValues([missing]));
+  }
+  return have.concat(missing);
+}
+
+function styleHeader_(range) {
+  range.setFontWeight('bold').setBackground('#7A1426').setFontColor('#FFE7A8');
+}
+
+// Rebuilt from scratch every time; it only holds formulas.
 function summary_(ss) {
-  if (ss.getSheetByName(SUMMARY)) return;
-  const sh = ss.insertSheet(SUMMARY, 0);
-  const c = key => RSVPS + '!' + col_(key) + '2:' + col_(key);
-  const people = '(' + c('adults') + '+' + c('kids') + ')';
-  const count = (key, val) => '=COUNTIF(' + c(key) + ',"' + val + '")';
-  const heads = (key, val) => '=SUMPRODUCT((' + c(key) + '="' + val + '")*' + people + ')';
-  const rows = [
-    ['Wedding RSVPs — live', ''],
-    ['Responses', '=COUNTA(' + c('phone') + ')'],
-    ['Total guests (adults + kids)', '=SUM(' + c('adults') + ')+SUM(' + c('kids') + ')'],
-    ['Kids', '=SUM(' + c('kids') + ')'],
-    ['', ''],
-    ['Sangeet 17th — responses dancing', count('dance', 'Yes')],
-    ['Sangeet 17th — people dancing', '=SUM(' + c('dancers') + ')'],
-    ['', ''],
-    ['Coming both days (responses)', count('days', 'Both days')],
-    ['Only some events (responses)', count('days', 'Some events')],
-    ['Still deciding (responses)', count('days', 'Not sure yet')],
-    ['Haldi — confirmed people', heads('haldi', 'Yes')],
-    ['Reception — confirmed people', heads('reception', 'Yes')],
-    ['Wedding — confirmed people', heads('wedding', 'Yes')],
-    ['', ''],
-    ['Need accommodation (responses)', count('stay', 'Yes')],
-    ['Need accommodation (people)', heads('stay', 'Yes')],
-    ['Accommodation undecided (responses)', count('stay', 'Not sure yet')],
-    ['Pickups needed', '=COUNTIFS(' + c('pickup') + ',"<>",' + c('pickup') + ',"<>No")'],
-  ];
+  let sh = ss.getSheetByName(SUMMARY);
+  if (sh) sh.clear();
+  else sh = ss.insertSheet(SUMMARY, 0);
+  const col = h => 'INDEX(' + RSVPS + '!A2:Z,0,MATCH("' + h + '",' + RSVPS + '!A1:Z1,0))';
+  const rows = [[SUMMARY_TITLE, '']].concat(
+    SUMMARY_ROWS.map(([label, f]) => [label, f.replace(/\{([^}]+)\}/g, (_, h) => col(h))]));
   sh.getRange(1, 1, rows.length, 2).setValues(rows);
   sh.getRange('A1').setFontWeight('bold').setFontSize(13).setFontColor('#7A1426');
   sh.getRange(2, 2, rows.length - 1, 1).setFontWeight('bold');
   sh.setColumnWidth(1, 300);
-}
-
-function col_(key) {
-  let n = FIELDS.findIndex(f => f[0] === key) + 1;
-  let s = '';
-  while (n > 0) {
-    s = String.fromCharCode(65 + ((n - 1) % 26)) + s;
-    n = Math.floor((n - 1) / 26);
-  }
-  return s;
 }
 
 function reply_(obj) {

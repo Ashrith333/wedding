@@ -1,10 +1,10 @@
-# RSVP → Google Sheet setup (one time, ~5 minutes)
+# RSVP to Google Sheet setup (one time, about 5 minutes)
 
 Guests fill in the RSVP page. Their answers go to **your private Google Sheet**. Guests can send answers, but they can never read them.
 
 | Tab | What's in it |
 |---|---|
-| **Summary** | Live headcounts: total guests, Sangeet dancers, Haldi, Reception and Wedding numbers, rooms and pickups |
+| **Summary** | Live headcounts: total guests, Sangeet dancers, Haldi, Reception and Wedding numbers, and stays to book |
 | **RSVPs** | One row per phone number holding the guest's **latest** answers. If they re-submit, their row is updated in place. |
 | **History** | Every submission ever sent, never edited, so you can always see what changed |
 
@@ -38,5 +38,6 @@ Commit it, then open the RSVP page and send a test response. It should show up i
 ## Good to know
 - **Phone number is the guest's ID.** Same number = same row, so you always have their final answers. The page accepts only valid 10-digit Indian mobile numbers. `+91` and a leading `0` are stripped automatically.
 - **Sharing:** share the Google Sheet (Viewer or Editor) with anyone who should see the list. Nobody else can.
-- **Changing the script later:** use **Deploy → Manage deployments → ✏️ → Version: New version → Deploy**. This keeps the same URL. A *New deployment* would create a new URL.
-- Each question on the page that a guest wasn't shown is saved as blank. For example, non-dancers get no song, and people not coming both days get no accommodation answer.
+- **Updating the script:** paste the new code, click **Save**, run **`setup`** once, then **Deploy → Manage deployments → ✏️ → Version: New version → Deploy**. This keeps the same URL. A *New deployment* would create a new URL.
+- **Columns are matched by name.** You can reorder or delete columns in the sheet, and the page can add or drop a question without a script change.
+- A question a guest wasn't shown is saved as blank. For example, guests whose celebrations are all on one day get no accommodation answer.

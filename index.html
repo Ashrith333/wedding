@@ -6,9 +6,9 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#7A1426">
 <title>Ashrith &amp; Aishwarya · RSVP</title>
-<meta name="description" content="18 &amp; 19 November 2026 · Nature Knots Resort, Bengaluru. Tap to RSVP.">
+<meta name="description" content="18 &amp; 19 November 2026 · Nature Knots Resort, Bengaluru. Kindly RSVP.">
 <meta property="og:title" content="Ashrith &amp; Aishwarya · Wedding RSVP 🪔">
-<meta property="og:description" content="18 &amp; 19 November 2026 · Nature Knots Resort, Bengaluru. Tap to RSVP.">
+<meta property="og:description" content="18 &amp; 19 November 2026 · Nature Knots Resort, Bengaluru. Kindly RSVP.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Rozha+One&family=Tiro+Telugu&display=swap" rel="stylesheet">
@@ -18,34 +18,52 @@
 </head>
 <body>
 <div class="frame">
-  <div class="toran" aria-hidden="true"></div>
+  <!-- Thoranam: marigold strings and mango leaves, gently swaying -->
+  <div class="toran" aria-hidden="true">
+    <i class="m"></i><i class="l"></i><i class="m"></i><i class="l"></i><i class="m"></i><i class="l"></i><i class="m"></i>
+    <i class="l"></i><i class="m"></i><i class="l"></i><i class="m"></i><i class="l"></i><i class="m"></i>
+  </div>
 
   <header class="hero">
+    <svg class="diya" viewBox="0 0 64 64" aria-hidden="true">
+      <defs>
+        <radialGradient id="glow"><stop offset="0" stop-color="#FFD36B" stop-opacity=".85"/><stop offset="1" stop-color="#FFD36B" stop-opacity="0"/></radialGradient>
+      </defs>
+      <circle class="glow" cx="32" cy="22" r="20" fill="url(#glow)"/>
+      <g class="flame">
+        <path d="M32 5C39 15 39 24 32 31C25 24 25 15 32 5Z" fill="#F59A1B"/>
+        <path d="M32 14C35.5 20 35.5 25 32 28.5C28.5 25 28.5 20 32 14Z" fill="#FFE7A8"/>
+      </g>
+      <path d="M6 33H58C56 45 45 52 32 52C19 52 8 45 6 33Z" fill="#C79A3B"/>
+      <path d="M6 33H58" stroke="#8B5E1A" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M14 40C20 44 44 44 50 40" stroke="#E9C46A" stroke-width="1.6" fill="none"/>
+      <path d="M25 52H39L36 58H28Z" fill="#A87A24"/>
+    </svg>
     <p class="blessing" lang="te">॥ శుభ వివాహం ॥</p>
     <h1 class="couple">
-      <span>Ashrith Reddy</span>
+      <span class="name">Ashrith Reddy</span>
       <span class="amp">&amp;</span>
-      <span>Aishwarya</span>
+      <span class="name">Aishwarya PS</span>
     </h1>
     <p class="invite">With the blessings of our families, we warmly invite you to celebrate with us</p>
-    <div class="divider" aria-hidden="true"><span>❁</span></div>
     <p class="when">18 &amp; 19 November 2026</p>
     <p class="where">
       <a href="https://www.google.com/maps/search/?api=1&amp;query=Nature+Knots+Resort+Bengaluru" target="_blank" rel="noopener">📍 Nature Knots Resort, Bengaluru</a>
     </p>
-    <p class="lede">It would mean the world to have you with us. Kindly share your plans below 🙏</p>
   </header>
 
+  <div class="temple" aria-hidden="true"></div>
+
   <main id="app">
-    <ol class="progress" id="progress" aria-label="Progress"></ol>
+    <p class="lede">It would mean the world to have you with us.<br>Kindly share your plans below 🙏</p>
 
     <form id="rsvp" novalidate>
       <!-- Honeypot: real guests never see or fill this -->
       <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
 
-      <!-- STEP 1 — who -->
-      <section class="step is-active" data-label="You" aria-labelledby="h-you">
-        <h2 id="h-you" tabindex="-1">Namaste 🙏</h2>
+      <section class="card" aria-labelledby="h-you">
+        <span class="badge" aria-hidden="true">🙏</span>
+        <h2 id="h-you">Namaste</h2>
         <p class="sub">We're so glad you're here</p>
         <p class="welcome" id="welcome" hidden></p>
 
@@ -71,7 +89,7 @@
             <label class="chip"><input type="radio" name="party" value="With spouse"><span>💑 With spouse</span></label>
             <label class="chip"><input type="radio" name="party" value="With family"><span>👨‍👩‍👧 With family</span></label>
           </div>
-          <div class="counters" data-show="family" hidden>
+          <div class="counters reveal" data-show="family" hidden>
             <div class="counter">
               <span class="counter-label">Adults <small>(including you)</small></span>
               <button type="button" class="ctr" data-for="adults" data-delta="-1" aria-label="Fewer adults">−</button>
@@ -88,9 +106,10 @@
         </fieldset>
       </section>
 
-      <!-- STEP 2 — sangeet: the 17th is only revealed to people who'll dance -->
-      <section class="step" data-label="Sangeet" aria-labelledby="h-sangeet">
-        <h2 id="h-sangeet" tabindex="-1">Sangeet Night 💃🕺</h2>
+      <!-- The 17th is only revealed to guests who'll dance -->
+      <section class="card" aria-labelledby="h-sangeet">
+        <span class="badge" aria-hidden="true">💃</span>
+        <h2 id="h-sangeet">Sangeet Night</h2>
         <p class="sub">An evening of music, dance and lots of joy</p>
 
         <fieldset class="q" data-required data-error="Please choose an option 🙏">
@@ -106,31 +125,17 @@
             <div class="date"><b>17</b><small>Nov · Tue</small></div>
             <div>
               <h3>Mehendi &amp; Sangeet</h3>
-              <p>Evening onwards · Nature Knots Resort</p>
+              <p>Evening onwards</p>
             </div>
           </article>
           <p class="note">Wonderful! 🎉 We can't wait to see you on stage. We'll be in touch soon with the details 💌</p>
-
-          <div class="q" data-show="groupDancing" hidden>
-            <div class="counter">
-              <span class="counter-label">How many of you would like to dance?</span>
-              <button type="button" class="ctr" data-for="dancers" data-delta="-1" aria-label="Fewer dancers">−</button>
-              <input type="number" id="dancers" name="dancers" value="1" min="1" max="20" readonly aria-label="Dancers">
-              <button type="button" class="ctr" data-for="dancers" data-delta="1" aria-label="More dancers">+</button>
-            </div>
-          </div>
-
-          <div class="q field">
-            <label for="song">A song you'd love to dance to <small>(optional)</small></label>
-            <input id="song" name="song" type="text" maxlength="120" placeholder="e.g. Butta Bomma">
-          </div>
         </div>
       </section>
 
-      <!-- STEP 3 — wedding days -->
-      <section class="step" data-label="Days" aria-labelledby="h-days">
-        <h2 id="h-days" tabindex="-1">The Wedding Days</h2>
-        <p class="sub">We'd love to have you for all of it ❤️</p>
+      <section class="card" aria-labelledby="h-days">
+        <span class="badge" aria-hidden="true">🌸</span>
+        <h2 id="h-days">The Wedding Celebrations</h2>
+        <p class="sub">We'd love to have you with us for all of it ❤️</p>
 
         <div class="events">
           <article class="event">
@@ -163,85 +168,41 @@
             <label class="chip"><input type="checkbox" name="events" value="Reception"><span>Reception · 18 Nov, evening</span></label>
             <label class="chip"><input type="checkbox" name="events" value="Wedding"><span>Wedding · 19 Nov, 6:30 AM</span></label>
           </div>
-          <p class="hint">We understand the timings may be a little early or late with your busy schedule — we'll be happy to see you at whichever you can make 😊</p>
+          <p class="hint">We understand the timings may be a little early or late with your busy schedule. We'll be happy to see you at whichever you can make 😊</p>
         </fieldset>
 
         <p class="note reveal" data-show="daysUnsure" hidden>No worries at all! You can come back anytime and update your response 😊</p>
       </section>
 
-      <!-- STEP 4 — stay: only asked when they're coming for both days -->
-      <section class="step" data-label="Stay" data-when="twoDays" aria-labelledby="h-stay">
-        <h2 id="h-stay" tabindex="-1">Your Stay</h2>
-        <p class="sub">We'd love for you to be comfortable 🥰</p>
+      <!-- Shown when the chosen celebrations span more than one day -->
+      <section class="card reveal" data-show="stayAsked" aria-labelledby="h-stay" hidden>
+        <span class="badge" aria-hidden="true">🏡</span>
+        <h2 id="h-stay">Your Stay</h2>
+        <p class="sub" id="stay-sub"></p>
 
         <fieldset class="q" data-required data-error="Please choose an option 🙏">
-          <legend>Would you like us to arrange a stay for you at the resort?</legend>
+          <legend>Do you need accommodation?</legend>
           <div class="chips stack">
-            <label class="chip"><input type="radio" name="stay" value="Yes"><span>🏨 Yes, please</span></label>
-            <label class="chip"><input type="radio" name="stay" value="No"><span>🏠 No, thank you — I'm all set</span></label>
-            <label class="chip"><input type="radio" name="stay" value="Not sure yet"><span>🤔 I'm not sure yet</span></label>
+            <label class="chip"><input type="radio" name="stay" value="1 night"><span>🛏️ Yes, for 1 night</span></label>
+            <label class="chip" data-show="twoNights" hidden><input type="radio" name="stay" value="2 nights"><span>🛏️ Yes, for 2 nights</span></label>
+            <label class="chip"><input type="radio" name="stay" value="No"><span>🙂 No, thank you</span></label>
           </div>
         </fieldset>
-
-        <div class="reveal" data-show="needStay" hidden>
-          <div class="q field">
-            <label for="city">Where will you be travelling from? <small>(city)</small></label>
-            <input id="city" name="city" type="text" autocomplete="address-level2" maxlength="60" placeholder="e.g. Hyderabad">
-          </div>
-
-          <fieldset class="q" data-required data-error="Please let us know when you'll arrive 🙏">
-            <legend>When will you arrive?</legend>
-            <div class="chips">
-              <label class="chip" data-show="dancing" hidden><input type="radio" name="arrival" value="17 Nov"><span>17 Nov, for Sangeet</span></label>
-              <label class="chip"><input type="radio" name="arrival" value="18 Nov morning"><span>18 Nov, morning</span></label>
-              <label class="chip"><input type="radio" name="arrival" value="18 Nov evening"><span>18 Nov, evening</span></label>
-            </div>
-          </fieldset>
-
-          <fieldset class="q" data-required data-error="Please choose an option 🙏">
-            <legend>When will you head back?</legend>
-            <div class="chips">
-              <label class="chip"><input type="radio" name="departure" value="19 Nov"><span>19 Nov, after the wedding</span></label>
-              <label class="chip"><input type="radio" name="departure" value="20 Nov"><span>20 Nov</span></label>
-            </div>
-          </fieldset>
-
-          <fieldset class="q">
-            <legend>Would you like a pickup in Bengaluru? <small>(optional)</small></legend>
-            <div class="chips">
-              <label class="chip"><input type="radio" name="pickup" value="No"><span>No, thank you</span></label>
-              <label class="chip"><input type="radio" name="pickup" value="Airport"><span>✈️ Airport</span></label>
-              <label class="chip"><input type="radio" name="pickup" value="Railway station"><span>🚆 Railway</span></label>
-              <label class="chip"><input type="radio" name="pickup" value="Bus stand"><span>🚌 Bus</span></label>
-            </div>
-          </fieldset>
-        </div>
-
-        <p class="note reveal" data-show="stayUnsure" hidden>No problem at all — you can update this anytime 😊</p>
       </section>
 
-      <!-- STEP 5 — note + review -->
-      <section class="step" data-label="Done" aria-labelledby="h-done">
-        <h2 id="h-done" tabindex="-1">Almost there!</h2>
-        <p class="sub">Have a quick look and send it our way 💌</p>
-
+      <section class="card" aria-labelledby="h-note">
+        <span class="badge" aria-hidden="true">💌</span>
+        <h2 id="h-note">A Note for Us</h2>
         <div class="q field">
           <label for="note">Anything you'd like us to know? <small>(optional)</small></label>
-          <textarea id="note" name="note" rows="3" maxlength="500" placeholder="Any special needs (like assistance for elders), or a few kind words for us 💌"></textarea>
-        </div>
-
-        <div class="review">
-          <h3>Your RSVP</h3>
-          <dl id="summary"></dl>
+          <textarea id="note" name="note" rows="3" maxlength="500" placeholder="Any special needs (like assistance for elders), or a few kind words for us"></textarea>
         </div>
       </section>
 
-      <p class="status" id="status" role="status" aria-live="polite"></p>
-
-      <nav class="nav">
-        <button type="button" class="btn ghost" id="back">← Back</button>
-        <button type="submit" class="btn primary" id="next">Continue →</button>
-      </nav>
+      <div class="send">
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+        <button type="submit" class="btn primary" id="send">Send RSVP 🪔</button>
+      </div>
     </form>
 
     <section class="thanks" id="thanks" hidden aria-labelledby="thanks-title">
@@ -252,6 +213,8 @@
       <button type="button" class="btn ghost" id="edit">✏️ Edit my response</button>
     </section>
   </main>
+
+  <div class="temple flip" aria-hidden="true"></div>
 </div>
 
 <footer class="foot">With love, from both our families 🪔</footer>
