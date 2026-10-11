@@ -225,7 +225,7 @@ body {
   line-height: 1.35;
 }
 .q legend + *, .field > label + * { clear: both; }
-.q small, .counter-label small { font-weight: 400; color: var(--ink-soft); }
+.q small { font-weight: 400; color: var(--ink-soft); }
 .hint { margin-top: 8px; font-size: .86rem; color: var(--ink-soft); }
 .err { margin-top: 8px; font-size: .9rem; font-weight: 600; color: var(--error); }
 
@@ -331,45 +331,6 @@ body {
   border-color: var(--error);
 }
 .q.invalid { animation: shake .35s; }
-
-/* counters */
-.counters { display: grid; gap: 10px; margin-top: 12px; }
-.counter {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px 8px 14px;
-  background: var(--ivory);
-  border: 1.5px solid var(--gold-soft);
-  border-radius: 12px;
-}
-.counter-label { flex: 1; font-weight: 600; line-height: 1.25; }
-.ctr {
-  flex: none;
-  width: 42px;
-  height: 42px;
-  border: 0;
-  border-radius: 50%;
-  font: 700 1.4rem/1 var(--font-body);
-  color: var(--maroon);
-  background: var(--ivory-2);
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-.ctr:active { background: var(--haldi); }
-.counter input {
-  width: 40px;
-  padding: 0;
-  text-align: center;
-  font: 700 1.2rem var(--font-body);
-  color: var(--ink);
-  background: transparent;
-  border: 0;
-  -moz-appearance: textfield;
-  appearance: textfield;
-}
-.counter input::-webkit-inner-spin-button,
-.counter input::-webkit-outer-spin-button { -webkit-appearance: none; }
 
 /* event cards */
 .events { display: grid; gap: 10px; margin: 16px 0 4px; }

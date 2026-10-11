@@ -20,7 +20,6 @@
 
   // Named conditions used by data-show="…"
   const RULES = {
-    family: s => s.party === 'With family',
     dancing: s => s.dance === 'Yes',
     someEvents: s => s.days === 'Some events',
     daysUnsure: s => s.days === 'Not sure yet',
@@ -35,8 +34,6 @@
   };
 
   /* ---------- state ---------- */
-
-  const int = (v, min, max) => Math.min(max, Math.max(min, parseInt(v, 10) || min));
 
   function read() {
     const s = { events: [] };
@@ -58,12 +55,6 @@
         el.value = val;
       }
     }
-  }
-
-  function partySize(s) {
-    if (s.party === 'With spouse') return 2;
-    if (s.party === 'With family') return int(s.adults, 1, 20) + int(s.kids, 0, 20);
-    return 1;
   }
 
   // Accepts "98765 43210", "+91 98765-43210", "098765…" and keeps the 10-digit number.
@@ -90,13 +81,12 @@
   // What gets stored: keys are the Sheet's column headers, in column order.
   function payload() {
     const s = read();
-    const family = s.party === 'With family';
     const yesNo = ev => (s.days === 'Not sure yet' ? 'Maybe' : s.days ? (attending(s, ev) ? 'Yes' : 'No') : '');
     const answers = {
       'Name': s.name || '',
       'Coming': s.party || '',
-      'Adults': family ? int(s.adults, 1, 20) : partySize(s),
-      'Kids': family ? int(s.kids, 0, 20) : 0,
+      'Adults': s.party === 'With spouse' ? 2 : 1,
+      'Kids': 0,
       'Dancing at Sangeet': s.dance === 'Yes' ? 'Yes' : 'No',
       'Days': s.days || '',
       'Haldi 18th AM': yesNo('Haldi'),
@@ -134,18 +124,14 @@
 
   function summaryRows(p) {
     const a = p.answers;
-    const plural = (n, word) => `${n} ${word}${n > 1 ? 's' : ''}`;
-    const who = a['Coming'] === 'With family'
-      ? `Family · ${plural(a['Adults'], 'adult')}${a['Kids'] ? `, ${plural(a['Kids'], 'kid')}` : ''}`
-      : a['Coming'];
     const events = [['Haldi', 'Haldi 18th AM'], ['Reception', 'Reception 18th PM'], ['Wedding', 'Wedding 19th AM']]
       .filter(([, col]) => a[col] === 'Yes').map(([ev]) => ev);
-    const days = { 'Both days': 'Both days ❤️', 'Some events': events.join(', '), 'Not sure yet': 'Not sure yet' }[a['Days']];
+    const days = { 'Both days': 'All the events ❤️', 'Some events': events.join(', '), 'Not sure yet': 'Not sure yet' }[a['Days']];
     const stay = { '1 night': 'Yes, 1 night', '2 nights': 'Yes, 2 nights', No: 'No, thank you' }[a['Accommodation']];
     return [
       ['Name', a['Name']],
       ['Mobile', p.phone && `+91 ${p.phone.slice(0, 5)} ${p.phone.slice(5)}`],
-      ['Coming', who],
+      ['Coming', a['Coming']],
       ['Sangeet', a['Dancing at Sangeet'] === 'Yes' ? 'Dancing 💃 · 17 Nov' : 'Cheering you on 👏'],
       ['Wedding', days],
       ['Stay', stay],
@@ -297,14 +283,6 @@
 
   form.addEventListener('input', onChange);
   form.addEventListener('change', onChange);
-
-  form.addEventListener('click', e => {
-    const btn = e.target.closest('.ctr');
-    if (!btn) return;
-    const input = form.elements[btn.dataset.for];
-    input.value = int(Number(input.value) + Number(btn.dataset.delta), Number(input.min), Number(input.max));
-    apply();
-  });
 
   // Enter in a text box just closes the keyboard instead of sending the whole form
   form.addEventListener('keydown', e => {
